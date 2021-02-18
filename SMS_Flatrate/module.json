@@ -1,0 +1,15 @@
+{
+  "id": "{72568873-AA5E-71E3-90FC-1EE1C203CE84}",
+  "name": "SMS_Flatrate",
+  "type": 3,
+  "vendor": "",
+  "aliases":
+  [
+      "SMSFlatrate"
+  ],
+  "url": "https://github.com/Housemann/SMS_Flatrate",
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "SMSF"
+}

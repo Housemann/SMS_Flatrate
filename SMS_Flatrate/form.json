@@ -1,0 +1,48 @@
+{
+  "elements":
+  [
+      { 
+          "type": "ValidationTextBox", 
+          "name": "APIKey", 
+          "caption": "API Key" 
+      },
+      { 
+          "type": "NumberSpinner", 
+          "name": "MinCredits", 
+          "caption": "Min Credits" ,
+          "digits": 2,
+          "suffix": " €"
+      },
+      { 
+          "type": "NumberSpinner", 
+          "name": "UpdateInterval", 
+          "caption": "Update Interval",
+          "suffix": "Minutes"
+      },
+      { 
+        "type": "Label",
+        "caption": "-----------------------------------------------------------------------"
+      },
+      { 
+          "type": "Label",
+          "caption": "Testcenter"
+      },
+      { 
+        "type": "ValidationTextBox", 
+        "name": "HandyNumber", 
+        "caption": "Handy Number"
+      },
+      { 
+        "type": "ValidationTextBox", 
+        "name": "TestMessage", 
+        "caption": "Test Message" 
+      }
+  ],
+  "actions": [
+        {
+            "type": "Button",
+            "caption": "Send Test Message",
+            "onClick": "SMSF_SendTestMessage($id);"
+        }
+    ] 
+}

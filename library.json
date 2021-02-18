@@ -1,0 +1,12 @@
+{
+  "id": "{B9B5E838-622C-D45F-8813-74CBF2671F34}",
+  "author": "Housemann",
+  "name": "SMS_Flatrate",
+  "url": "https://github.com/Housemann/SMS_Flatrate",
+  "compatibility": {
+      "version": "5.5"
+  },
+  "version": "1.0",
+  "build": 0,
+  "date": 0
+}
