@@ -90,10 +90,13 @@
             // Schnittstellenbegrenzung: Maximal 10 Aufrufe pro Sekunde / max. 10 request per secound
             if($CountArrayHandyNumbers>10)
               IPS_Sleep(1000);
-          }       
-          
+          }
+
           // aktuelles guthaben abfragen
           $this->GetCredits();
+
+          // status holen
+          $this->GetStatusRequest();
 
           // json in Attribute schreiben
           $this->WriteAttributeString("ReturnArray",json_encode($ArrayAllNumbers));
