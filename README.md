@@ -5,4 +5,4 @@
 Folgendes Modul beinhaltet das SMS_Flatrate Repository:
 
 - __SMS-Flatrate__ ([Dokumentation](SMS_Flatrate))  
-	Kommunikation per API mit dem Provider SMS-Flatrate. Es können damit SMS über IP-Symcon versand werden.
+	Kommunikation mit dem Provider SMS-Flatrate. Es können damit SMS an mehrere Empänmger über IP-Symcon versand werden.
