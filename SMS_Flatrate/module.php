@@ -15,19 +15,14 @@
             $this->RegisterPropertyString("TestMessage", "TestMessage");
 
             // Variablen
-            $this->RegisterVariableString("ReturnCode","Return Code");
-            $this->RegisterVariableString("ReturnMessage","Return Message");
-            $this->RegisterVariableFloat("ReturnPrice","Return Price");
             $this->RegisterVariableFloat("Credits","Credits");
-
-            $this->RegisterVariableString("SMSid_1","SMSid_1");
-            $this->RegisterVariableString("SMSid_2","SMSid_2");
+            $this->RegisterVariableString("ReturnValues","Return Values","~TextBox");
 
             // Timer anlegen
             $this->RegisterTimer ("TimerReturnValues", 0, 'SMSF_GetStatusRequest($_IPS[\'TARGET\']);');
 
             // Attributes
-            $this->RegisterAttributeString("ReturnSmsID","");
+            $this->RegisterAttributeString("ReturnArray","");
  
         }
  
@@ -35,7 +30,6 @@
         public function ApplyChanges() {
             // Diese Zeile nicht löschen
             parent::ApplyChanges();
-
 
             // Timer zum Mediathek Update
             $this->SetTimerInterval("TimerReturnValues", $this->ReadPropertyInteger("UpdateInterval") * 60 * 1000);
@@ -46,27 +40,43 @@
 
         public function SendSMS(string $HandyNumbers, string $Message) 
         {
+
           $ApiKey = $this->ReadPropertyString("APIKey");
-          $Type	 = "1";
-          ##&bulk=1
-          $Url = "https://www.smsflatrate.net/schnittstelle.php?key=".$ApiKey."&from=smsflatrate&to=".$HandyNumbers."&text=".urlencode($Message)."&type=".$Type."&cost=1&status=1";
-          $OutputSendSMS = $this->SendCurl($Url);
+          $ArrayHandyNumbers = explode(";",$HandyNumbers);
+          $CountArrayHandyNumbers = count($ArrayHandyNumbers);
 
-          $this->WriteAttributeString("ReturnSmsID",@$OutputSendSMS[1]);
+          $ArrayAllNumbers = array();
+          foreach($ArrayHandyNumbers as $HandyNumber) {
+            $Url = "https://www.smsflatrate.net/schnittstelle.php?key=".$ApiKey."&from=smsflatrate&to=".$HandyNumber."&text=".urlencode($Message)."&type=1&cost=1&status=1";
+
+            $OutputSendSMS = $this->SendCurl($Url);
+            array_unshift($OutputSendSMS,$HandyNumber);
+
+            // ReturnPro Nummer sammeln
+            $ArrayAllNumbers[] = array(
+              "HandyNumber"   => @$OutputSendSMS[0],
+              "Date"          => time(),
+              "StatusCode"    => @$OutputSendSMS[1],
+              "RequestSmsId"  => @$OutputSendSMS[2],
+              "Price"         => @$OutputSendSMS[3]
+            );
+            
+            // Schnittstellenbegrenzung: Maximal 10 Aufrufe pro Sekunde / max. 10 request per secound
+            if($CountArrayHandyNumbers>10)
+              IPS_Sleep(1000);
+          }       
           
-          $this->SetValue("ReturnPrice",@$OutputSendSMS[2]);
-          $this->SetValue("ReturnCode",@$OutputSendSMS[0]);
-          $this->SetValue("ReturnMessage",$this->ErrorCodes(@$OutputSendSMS[0]));
-
+          // aktuelles guthaben abfragen
           $this->GetCredits();
 
-          return array(
-            "StatusCode"    => @$OutputSendSMS[0],
-            "RequestSmsId"  => @$OutputSendSMS[1],
-            "Price"         => @$OutputSendSMS[2]
-          );
+          // json in Attribute schreiben
+          $this->WriteAttributeString("ReturnArray",json_encode($ArrayAllNumbers));
+          
+          return $ArrayAllNumbers;
         }
 
+
+        // guthaben abfrage
         public function GetCredits() 
         {
           $ApiKey = $this->ReadPropertyString("APIKey");
@@ -76,27 +86,55 @@
 
           $this->SetValue("Credits",@$OutputCredits[0]);
 
-          #return array(
-          #  "Credits" => @$OutputCredits[0]
-          #);
+          return array(
+            "Credits" => @$OutputCredits[0]
+          );
         }
 
+
+        // status ueber SMSid holen
         public function GetStatusRequest()
         {
-          // Regest SMS id auslesen und prüfen ob angekommen
-          $ReturnSMSid = $this->ReadAttributeString("ReturnSmsID");
-          
-          // Status ueber SMSid pruefen aus dem SMS versand
-          $Url = "https://www.smsflatrate.net/status.php?id=".$ReturnSMSid;
-          $OutputStatus = $this->SendCurl ($Url);
+          // Regest SMS ids auslesen und prüfen ob angekommen
+          $ReturnValues = $this->ReadAttributeString("ReturnArray");
+          $ReturnValues = json_decode($ReturnValues,true);
 
-          $this->SetValue("ReturnCode",@$OutputStatus[0]);
-          $this->SetValue("ReturnMessage",$this->ErrorCodes(@$OutputStatus[0]));
+          $Message = "";
+          foreach($ReturnValues as $Values) {
+            
+            // curl aufrum um request abzufragen
+            $Url = "https://www.smsflatrate.net/status.php?id=".$Values['RequestSmsId'];
+            $OutputStatus = $this->SendCurl ($Url);
+            
+            // Output in array schrieben
+            $OutputStatus = array(
+              "StatusCode"  => $OutputStatus[0],
+              "Date"        => $OutputStatus[1]
+            );
           
-          #return array (
-          #  "StatusCode"      =>  @$OutputStatus[0],
-          #  "TimeStampUnix"   =>  @$OutputStatus[1]
-          #);
+            // request daten DATE und STATUSCODE im Array ändern mit neuen werten
+            foreach($Values as $key => $value) {
+              switch ($key) {
+                case 'Date':
+                  $Values['Date'] = $OutputStatus['Date'];
+                  break;
+                case 'StatusCode':
+                  $Values['StatusCode'] = $OutputStatus['StatusCode'];
+                  break;
+              }
+            }
+            // ergebnis
+            $Message = $Message. "HandyNumber: ".$Values['HandyNumber']."\n";
+            $Message = $Message. "Date: ".date("d.m.Y H:i:s",$Values['Date'])."\n";
+            $Message = $Message. "StatusCode: ".$Values['StatusCode']."\n";
+            $Message = $Message. "StatusMessage: ".$this->ErrorCodes($Values['StatusCode'])."\n";
+            $Message = $Message. "Price: ".round($Values['Price'],2)." €"."\n";
+            $Message = $Message. "\n";
+          }
+          SetValue($this->GetIDForIdent("ReturnValues"),$Message);
+
+          // aktuelles guthaben abfragen
+          $this->GetCredits();
         }
 
         // Curl Aufruf
@@ -146,7 +184,7 @@
           $ApiKey       = $this->ReadPropertyString("APIKey");
           $Message      = $this->ReadPropertyString("TestMessage");
 
-          if(!empty($HandyNumber) && !preg_match('/^[0-9]+$/', $HandyNumber)) {  
+          if(!empty($HandyNumber) && !preg_match('/^[0-9]+$/', $HandyNumber)) {
               echo "HandyNumber is wrong!\nCheck there are \"No spaces allowed\"";
           } elseif(!empty($HandyNumber) && preg_match('/^[0-9]+$/', $HandyNumber)) {
               $Output = $this->SendSMS($HandyNumber, $Message);

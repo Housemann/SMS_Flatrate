@@ -21,11 +21,11 @@
       },
       { 
         "type": "Label",
-        "caption": "-----------------------------------------------------------------------"
+        "caption": "__________________________________________"
       },
       { 
           "type": "Label",
-          "caption": "Testcenter"
+          "caption": "TestCenter"
       },
       { 
         "type": "ValidationTextBox", 
