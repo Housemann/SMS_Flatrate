@@ -2,14 +2,18 @@
   "elements":
   [
       { 
+        "type": "Label",
+        "caption": "************** SMS Flatrate ***************"
+      },
+      { 
           "type": "ValidationTextBox", 
           "name": "APIKey", 
-          "caption": "API Key" 
+          "caption": "API Key"
       },
       { 
           "type": "NumberSpinner", 
           "name": "MinCredits", 
-          "caption": "Min Credits" ,
+          "caption": "Min Credits",
           "digits": 2,
           "suffix": " €"
       },
@@ -30,7 +34,7 @@
       { 
         "type": "ValidationTextBox", 
         "name": "HandyNumber", 
-        "caption": "Handy Number"
+        "caption": "Handy number"
       },
       { 
         "type": "ValidationTextBox", 

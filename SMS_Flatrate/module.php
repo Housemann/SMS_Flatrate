@@ -1,6 +1,11 @@
 <?php
+    
+    require_once __DIR__ . '/../libs/helper_variables.php';
+    
     // Klassendefinition
     class SMS_Flatrate extends IPSModule {
+
+        use SMSF_HelperVariables;
  
         // Überschreibt die interne IPS_Create($id) Funktion
         public function Create() {
@@ -14,9 +19,18 @@
             $this->RegisterPropertyInteger("UpdateInterval", 60);
             $this->RegisterPropertyString("TestMessage", "TestMessage");
 
+            // VariablenProfil für Credits und Waehrung anlegen
+            $this->RegisterProfileFloat("SMSF.Currency", "", "", " €", 0, 0, 0, 2);
+            $this->RegisterProfileIntegerEx('SMSF.Balance'          , '', '', '', Array(
+              Array(0 , $this->translate('No credit')               , '', -1),
+              Array(1 , $this->translate('Credit balance undercut') , '', -1),
+              Array(2 , $this->translate('Credit sufficient')       , '', -1)
+            ));
+
             // Variablen
-            $this->RegisterVariableFloat("Credits","Credits");
-            $this->RegisterVariableString("ReturnValues","Return Values","~TextBox");
+            $this->RegisterVariableFloat("Credits",$this->translate("Credits"),"SMSF.Currency",0);
+            $this->RegisterVariableInteger("MinimumBalance",$this->translate("Minimum balance"),"SMSF.Balance",1);
+            $this->RegisterVariableString("ReturnValues",$this->translate("Return Values"),"~TextBox",2);
 
             // Timer anlegen
             $this->RegisterTimer ("TimerReturnValues", 0, 'SMSF_GetStatusRequest($_IPS[\'TARGET\']);');
@@ -34,9 +48,21 @@
             // Timer zum Mediathek Update
             $this->SetTimerInterval("TimerReturnValues", $this->ReadPropertyInteger("UpdateInterval") * 60 * 1000);
         }
- 
-        
 
+
+        public function Destroy() 
+        {
+            // Remove variable profiles from this module if there is no instance left
+            $InstancesAR = IPS_GetInstanceListByModuleID('{72568873-AA5E-71E3-90FC-1EE1C203CE84}');
+            if ((@array_key_exists('0', $InstancesAR) === false) || (@array_key_exists('0', $InstancesAR) === NULL)) {
+                $VarProfileAR = array('SMSF.Balance','SMSF.Currency');
+                foreach ($VarProfileAR as $VarProfileName) {
+                    @IPS_DeleteVariableProfile($VarProfileName);
+                }
+            }
+            parent::Destroy();
+        }  
+        
 
         public function SendSMS(string $HandyNumbers, string $Message) 
         {
@@ -80,11 +106,23 @@
         public function GetCredits() 
         {
           $ApiKey = $this->ReadPropertyString("APIKey");
+          $MinCredits = $this->ReadPropertyFloat("MinCredits");
 
           $Url = "https://www.smsflatrate.net/schnittstelle.php?key=".$ApiKey."&request=credits";
           $OutputCredits = $this->SendCurl($Url);
 
+          // Variable füllen
           $this->SetValue("Credits",@$OutputCredits[0]);
+
+          // Status Var setzten
+          if( floatval(@$OutputCredits[0]) < floatval($MinCredits) ) {
+            $this->SetValue("MinimumBalance",1);
+          } elseif ( floatval(@$OutputCredits[0]) == 0 ) {
+            $this->SetValue("MinimumBalance",0);
+          } else {
+            $this->SetValue("MinimumBalance",2);
+          }
+          
 
           return array(
             "Credits" => @$OutputCredits[0]
@@ -124,11 +162,11 @@
               }
             }
             // ergebnis
-            $Message = $Message. "HandyNumber: ".$Values['HandyNumber']."\n";
-            $Message = $Message. "Date: ".date("d.m.Y H:i:s",$Values['Date'])."\n";
-            $Message = $Message. "StatusCode: ".$Values['StatusCode']."\n";
-            $Message = $Message. "StatusMessage: ".$this->ErrorCodes($Values['StatusCode'])."\n";
-            $Message = $Message. "Price: ".round($Values['Price'],2)." €"."\n";
+            $Message = $Message. $this->translate("HandyNumber:")." ".$Values['HandyNumber']."\n";
+            $Message = $Message. $this->translate("Date:")." ".date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock")."\n";
+            $Message = $Message. $this->translate("Status:")." ".$Values['StatusCode']."\n";
+            $Message = $Message. $this->translate("Status Message:")." ".$this->translate($this->ErrorCodes($Values['StatusCode']))."\n";
+            $Message = $Message. $this->translate("Price:")." ".round($Values['Price'],2)." €"."\n";
             $Message = $Message. "\n";
           }
           SetValue($this->GetIDForIdent("ReturnValues"),$Message);
@@ -154,25 +192,25 @@
           // Error codes
           $ErrorCodes = array 
           (
-            100 => "SMS erfolgreich an das Gateway übertragen",
-            101 => "SMS wurde zugestellt",
-            102 => "SMS wurde noch nicht zugestellt (z.B. Handy aus oder temporär nicht erreichbar",
-            103 => "SMS konnte vermutlich nicht zugestellt werden (Rufnummer falsch, SIM nicht aktiv)",
-            104 => "SMS konnte nach Ablauf von 48 Stunden noch immer nicht zugestellt werden.Aus dem Rückgabewert 102 wird nach Ablauf von 2 Tagen der Status 104.",
-            109 => "SMS ID abgelaufen oder ungültig (manuelle Status-Abfrage)",
-            110 => "Falscher Schnittstellen-Key oder Ihr Account ist gesperrt",
-            120 => "Guthaben reicht nicht aus",
-            130 => "Falsche Datenübergabe (z.B. Absender fehlt)",
-            131 => "Empfänger nicht korrekt",
-            132 => "Absender nicht korrekt",
-            133 => "Nachrichtentext nicht korrekt",
-            140 => "Falscher AppKey oder Ihr Account ist gesperrt",
-            150 => "Sie haben versucht an eine internationale Handynummer eines Gateways, das ausschließlich für den Versand nach Deutschland bestimmt ist, zu senden. Bitte internationales Gateway oder Auto-Type-Funktion verwenden.",
-            170 => "Parameter time= ist nicht korrekt. Bitte im Format: TT.MM.JJJJ-SS:MM oder Parameter entfernen für sofortigen Versand.",
-            171 => "Parameter time= ist zu weit in der Zukunft terminiert (max. 360 Tage)",
-            180 => "Account noch nicht komplett freigeschaltet Volumen-Beschränkung noch aktiv Bitte im Kundencenter die Freischaltung beantragen, damit unbeschränkter Nachrichtenversand möglich ist.",
-            231 => "Keine smsflatrate.net Gruppe vorhanden oder nicht korrekt",
-            404 => "Unbekannter Fehler. Bitte dringend Support (ticket@smsflatrate.net) kontaktieren."			
+            100 => "SMS successfully transmitted to the gateway",
+            101 => "SMS was delivered",
+            102 => "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable",
+            103 => "SMS probably could not be delivered (wrong phone number, SIM not active)",
+            104 => "SMS still could not be delivered after 48 hours.The return value 102 becomes status 104 after 2 days.",
+            109 => "SMS ID expired or invalid (manual status query)",
+            110 => "Wrong interface key or your account is locked",
+            120 => "Credit is not enough",
+            130 => "Incorrect data transfer (e.g. sender is missing)",
+            131 => "Receiver not correct",
+            132 => "Sender not correct",
+            133 => "Message text not correct",
+            140 => "Wrong AppKey or your account is locked",
+            150 => "You have tried to send to an international cell phone number of a gateway that is exclusively for sending to Germany. Please use international gateway or auto type function.",
+            170 => "Parameter time= is not correct. Please in format: DD.MM.YYY-SS:MM or remove parameter for immediate shipping.",
+            171 => "Parameter time= is scheduled too far in the future (max. 360 days)",
+            180 => "Account not yet completely activated Volume restriction still active Please request activation in the Customer Center so that unlimited messaging is possible.",
+            231 => "No smsflatrate.net group available or not correct",
+            404 => "Unknown error. Please contact support (ticket@smsflatrate.net) urgently."
           );
 
           return $ErrorCodes[$Code];
@@ -185,12 +223,12 @@
           $Message      = $this->ReadPropertyString("TestMessage");
 
           if(!empty($HandyNumber) && !preg_match('/^[0-9]+$/', $HandyNumber)) {
-              echo "HandyNumber is wrong!\nCheck there are \"No spaces allowed\"";
+              echo $this->translate("HandyNumber is wrong!");
           } elseif(!empty($HandyNumber) && preg_match('/^[0-9]+$/', $HandyNumber)) {
               $Output = $this->SendSMS($HandyNumber, $Message);
-              echo "Status: ".$Output['StatusCode']."\n"."Status Message: ".$this->ErrorCodes($Output['StatusCode'])."\n"."Price: ".str_replace(".",",",round($Output['Price'],2));
+              echo $this->translate("Status:")." ".$Output[0]['StatusCode']."\n".$this->translate("Status Message:")." ".$this->translate($this->ErrorCodes($Output[0]['StatusCode']))."\n".$this->translate("Price:")." ".str_replace(".",",",round($Output[0]['Price'],2));
           } elseif(empty($HandyNumber)) {
-              echo "Handynumber is empty!";
+              echo $this->translate("Handynumber is empty!");
           }
         }
             
