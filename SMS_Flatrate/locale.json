@@ -3,7 +3,7 @@
       "de": { 
         "SMS successfully transmitted to the gateway": "SMS erfolgreich an das Gateway übertragen",
         "SMS was delivered": "SMS wurde zugestellt",
-        "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable": "SMS wurde noch nicht zugestellt (z.B. Handy aus oder temporär nicht erreichbar",
+        "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable)": "SMS wurde noch nicht zugestellt (z.B. Handy aus oder temporär nicht erreichbar)",
         "SMS probably could not be delivered (wrong phone number, SIM not active)": "SMS konnte vermutlich nicht zugestellt werden (Rufnummer falsch, SIM nicht aktiv)",
         "SMS still could not be delivered after 48 hours.The return value 102 becomes status 104 after 2 days.": "SMS konnte nach Ablauf von 48 Stunden noch immer nicht zugestellt werden.Aus dem Rückgabewert 102 wird nach Ablauf von 2 Tagen der Status 104.",
         "SMS ID expired or invalid (manual status query)": "SMS ID abgelaufen oder ungültig (manuelle Status-Abfrage)",
@@ -47,7 +47,7 @@
       "de_DE": {
         "SMS successfully transmitted to the gateway": "SMS erfolgreich an das Gateway übertragen",
         "SMS was delivered": "SMS wurde zugestellt",
-        "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable": "SMS wurde noch nicht zugestellt (z.B. Handy aus oder temporär nicht erreichbar",
+        "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable)": "SMS wurde noch nicht zugestellt (z.B. Handy aus oder temporär nicht erreichbar)",
         "SMS probably could not be delivered (wrong phone number, SIM not active)": "SMS konnte vermutlich nicht zugestellt werden (Rufnummer falsch, SIM nicht aktiv)",
         "SMS still could not be delivered after 48 hours.The return value 102 becomes status 104 after 2 days.": "SMS konnte nach Ablauf von 48 Stunden noch immer nicht zugestellt werden.Aus dem Rückgabewert 102 wird nach Ablauf von 2 Tagen der Status 104.",
         "SMS ID expired or invalid (manual status query)": "SMS ID abgelaufen oder ungültig (manuelle Status-Abfrage)",

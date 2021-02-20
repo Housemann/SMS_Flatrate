@@ -91,16 +91,14 @@
             if($CountArrayHandyNumbers>10)
               IPS_Sleep(1000);
           }
-
-          // aktuelles guthaben abfragen
-          $this->GetCredits();
-
-          // status holen
-          $this->GetStatusRequest();
-
           // json in Attribute schreiben
           $this->WriteAttributeString("ReturnArray",json_encode($ArrayAllNumbers));
-          
+
+          // aktuelles guthaben abfragen
+          $ReturnCredits = $this->GetCredits();
+
+          // Guthaben an Array anfügen
+          array_push($ArrayAllNumbers,array("Credits" => $ReturnCredits['Credits']));
           return $ArrayAllNumbers;
         }
 
@@ -152,8 +150,8 @@
             
             // Output in array schrieben
             $OutputStatus = array(
-              "StatusCode"  => $OutputStatus[0],
-              "Date"        => $OutputStatus[1]
+              "StatusCode"  => @$OutputStatus[0],
+              "Date"        => @$OutputStatus[1]
             );
           
             // request daten DATE und STATUSCODE im Array ändern mit neuen werten
@@ -208,7 +206,7 @@
           (
             100 => "SMS successfully transmitted to the gateway",
             101 => "SMS was delivered",
-            102 => "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable",
+            102 => "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable)",
             103 => "SMS probably could not be delivered (wrong phone number, SIM not active)",
             104 => "SMS still could not be delivered after 48 hours.The return value 102 becomes status 104 after 2 days.",
             109 => "SMS ID expired or invalid (manual status query)",
