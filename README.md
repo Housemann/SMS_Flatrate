@@ -5,4 +5,4 @@
 Folgendes Modul beinhaltet das SMS_Flatrate Repository:
 
 - __SMS-Flatrate__ ([Dokumentation](SmsFlatrate))  
-	Kommunikation per API mit dem Dienstleister SMS-Flatrate. Es können damit SMS über IP-Symcon bis zu 1071 Zeichen (7 SMS) versand werden.
+	Kommunikation per API mit dem Provider SMS-Flatrate. Es können damit SMS über IP-Symcon versand werden.
