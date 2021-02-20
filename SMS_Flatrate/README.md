@@ -58,7 +58,12 @@ Mit dieser Funktion kann man sich das aktuelle Guthaben holen .
 SMSF_GetCredits($Instance);
 ```
 
-Mit dieser Funktion kann man den Status der letzten SMS holen.
+Mit dieser Funktion kann man den Status der letzten SMS holen, die über das Modul versendet wurden.
 ```php
 SMSF_GetStatusRequest($Instance);
+```
+
+Mit dieser Funktion kann man den Status einer bestimmten SMSid holen.
+```php
+SMSF_GetStatusSmsId($Instance, string $SmsId)
 ```

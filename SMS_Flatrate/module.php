@@ -134,6 +134,14 @@
           );
         }
 
+        public function GetStatusSmsId(string $SmsId)
+        {
+          $Url = "https://www.smsflatrate.net/status.php?id=".$SmsId;
+          $OutputStatus = $this->SendCurl ($Url);
+
+          return $OutputStatus;
+        }
+
 
         // status ueber SMSid holen
         public function GetStatusRequest()
