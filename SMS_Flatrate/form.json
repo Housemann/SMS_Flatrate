@@ -6,6 +6,14 @@
         "caption": "************** SMS Flatrate ***************"
       },
       { 
+        "type": "Label",
+        "caption": "https://smsflatrate.net/"
+      },
+      { 
+        "type": "Label",
+        "caption": "*******************************************"
+      },
+      { 
           "type": "ValidationTextBox", 
           "name": "APIKey", 
           "caption": "API Key"
