@@ -44,7 +44,7 @@ Name             | VariableTyp | Beschreibung
 ---------------- | ----------- | ---------------------
 Guthaben         | (float)     | Anzeige des aktuellen Guthabens
 Guthaben Warnung | (integer)   | Guthaben (Vorhanden, Gering, Kein Guthaben)
-Rückgabewerte    | (string)    | TextBox mit werten der zuletzt versendeten SMS
+Rückgabewerte    | (string)    | TextBox mit werten der zuletzt versendeten SMS (Wenn ein Preis von 0,00 € zurück kommt, hat man noch FreeSMS)
 
 ### 6. Funktionen
 

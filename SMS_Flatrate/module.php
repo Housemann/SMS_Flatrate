@@ -16,7 +16,7 @@
             $this->RegisterPropertyString("HandyNumber", "");
             $this->RegisterPropertyString("APIKey", "YourApyKey");
             $this->RegisterPropertyFloat("MinCredits", 0.5);
-            $this->RegisterPropertyInteger("UpdateInterval", 60);
+            $this->RegisterPropertyInteger("UpdateInterval", 5);
             $this->RegisterPropertyString("TestMessage", "TestMessage");
 
             // VariablenProfil für Credits und Waehrung anlegen
@@ -44,6 +44,9 @@
         public function ApplyChanges() {
             // Diese Zeile nicht löschen
             parent::ApplyChanges();
+
+            // Guthaben holen
+            $this->GetCredits();
 
             // Timer zum Mediathek Update
             $this->SetTimerInterval("TimerReturnValues", $this->ReadPropertyInteger("UpdateInterval") * 60 * 1000);
@@ -113,7 +116,8 @@
           $OutputCredits = $this->SendCurl($Url);
 
           // Variable füllen
-          $this->SetValue("Credits",@$OutputCredits[0]);
+          if(!empty(@$OutputCredits[0]))
+            $this->SetValue("Credits",@$OutputCredits[0]);
 
           // Status Var setzten
           if( floatval(@$OutputCredits[0]) < floatval($MinCredits) ) {
