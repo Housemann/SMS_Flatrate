@@ -21,10 +21,10 @@
 
             // VariablenProfil für Credits und Waehrung anlegen
             $this->RegisterProfileFloat("SMSF.Currency", "", "", " €", 0, 0, 0, 2);
-            $this->RegisterProfileIntegerEx('SMSF.Balance'          , '', '', '', Array(
-              Array(0 , $this->translate('No credit')               , '', -1),
-              Array(1 , $this->translate('Low') , '', -1),
-              Array(2 , $this->translate('Available')       , '', -1)
+            $this->RegisterProfileIntegerEx('SMSF.Balance'  , '', '', '', Array(
+              Array(0 , $this->translate('No credit')       , '', '0xFF6464'),
+              Array(1 , $this->translate('Low')             , '', '0xFFBE80'),
+              Array(2 , $this->translate('Available')       , '', '0x64FF64')
             ));
 
             // Variablen
@@ -137,7 +137,10 @@
           $ReturnValues = $this->ReadAttributeString("ReturnArray");
           $ReturnValues = json_decode($ReturnValues,true);
 
+          $MaxCount = count($ReturnValues);
           $Message = "";
+          
+          $Cnt = 0;
           foreach($ReturnValues as $Values) {
             
             // curl aufrum um request abzufragen
@@ -167,8 +170,16 @@
             $Message = $Message. $this->translate("Status:")." ".$Values['StatusCode']."\n";
             $Message = $Message. $this->translate("Status Message:")." ".$this->translate($this->ErrorCodes($Values['StatusCode']))."\n";
             $Message = $Message. $this->translate("Price:")." ".round($Values['Price'],2)." €"."\n";
-            $Message = $Message. "\n";
+            
+            $Cnt++;
+
+            if($Cnt < $MaxCount) {
+              $Message = $Message. "\n";
+            } elseif($Cnt == $MaxCount) {
+              $Message = $Message. "";
+            }
           }
+          // Message in TextBox schreiben
           SetValue($this->GetIDForIdent("ReturnValues"),$Message);
 
           // aktuelles guthaben abfragen
