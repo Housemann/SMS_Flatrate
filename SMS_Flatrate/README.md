@@ -1,5 +1,5 @@
 # SMS Flatrate
-Mit dem SMS Flattrate Modul, lassen sich SMS an einen oder mehrere Empfänger über den Provider Sms-Flatrate versenden. Die Rückgabe der SMSid vom Provider, ermöglicht das Abfragen des Status der SMS. So kann man sehen ob diese angekommen ist. Der Status sowie der Preis und das noch verfügbare Guthaben, werden in einer TextBox für die zuletzt versendeten SMS angezeigt. 
+Mit dem SMS Flatrate Modul, lassen sich SMS an einen oder mehrere Empfänger über den Provider Sms-Flatrate versenden. Die Rückgabe der SMSid vom Provider, ermöglicht das Abfragen des Status der SMS. So kann man sehen ob diese angekommen ist. Der Status sowie der Preis und das noch verfügbare Guthaben, werden in einer TextBox für die zuletzt versendeten SMS angezeigt. 
 
 ### Inhaltsverzeichnis
 
