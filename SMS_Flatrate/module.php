@@ -23,13 +23,13 @@
             $this->RegisterProfileFloat("SMSF.Currency", "", "", " €", 0, 0, 0, 2);
             $this->RegisterProfileIntegerEx('SMSF.Balance'          , '', '', '', Array(
               Array(0 , $this->translate('No credit')               , '', -1),
-              Array(1 , $this->translate('Credit balance undercut') , '', -1),
-              Array(2 , $this->translate('Credit sufficient')       , '', -1)
+              Array(1 , $this->translate('Low') , '', -1),
+              Array(2 , $this->translate('Available')       , '', -1)
             ));
 
             // Variablen
             $this->RegisterVariableFloat("Credits",$this->translate("Credits"),"SMSF.Currency",0);
-            $this->RegisterVariableInteger("MinimumBalance",$this->translate("Minimum balance"),"SMSF.Balance",1);
+            $this->RegisterVariableInteger("CreditWarning",$this->translate("Credit warning"),"SMSF.Balance",1);
             $this->RegisterVariableString("ReturnValues",$this->translate("Return Values"),"~TextBox",2);
 
             // Timer anlegen
@@ -116,11 +116,11 @@
 
           // Status Var setzten
           if( floatval(@$OutputCredits[0]) < floatval($MinCredits) ) {
-            $this->SetValue("MinimumBalance",1);
+            $this->SetValue("CreditWarning",1);
           } elseif ( floatval(@$OutputCredits[0]) == 0 ) {
-            $this->SetValue("MinimumBalance",0);
+            $this->SetValue("CreditWarning",0);
           } else {
-            $this->SetValue("MinimumBalance",2);
+            $this->SetValue("CreditWarning",2);
           }
           
 
