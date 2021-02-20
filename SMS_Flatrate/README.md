@@ -13,7 +13,7 @@ Mit dem SMS Flatrate Modul, lassen sich SMS an einen oder mehrere Empfänger üb
 ### 1. Funktionsumfang
 
 * Ermöglicht das Versenden von SMS an mehrere Emfänger.
-* Auslesen des Status der versedneten SMS und speichern in TextBox.
+* Auslesen des Status der versedneten SMS und speichern in TextBox (Nach 14 Tagen, wenn keine neue SMS versendet, wechselt der Status auf 109 (Abgelaufen)).
 * Variable zum anzeigen ob Guthaben unterschritten.
 * Anzeige des Guthabens.
 
