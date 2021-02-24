@@ -28,8 +28,8 @@
             ));
 
             // Variablen
-            $this->RegisterVariableFloat("Credits",$this->translate("Credits"),"SMSF.Currency",0);
-            $this->RegisterVariableInteger("CreditWarning",$this->translate("Credit warning"),"SMSF.Balance",1);
+            $this->RegisterVariableFloat("Credits",$this->translate("Available Balance"),"SMSF.Currency",0);
+            $this->RegisterVariableInteger("Creditwarning",$this->translate("Credits"),"SMSF.Balance",1);
             $this->RegisterVariableString("ReturnValues",$this->translate("Return Values"),"~TextBox",2);
 
             // Timer anlegen
