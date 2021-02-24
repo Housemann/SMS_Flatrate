@@ -76,7 +76,7 @@
 
           $ArrayAllNumbers = array();
           foreach($ArrayHandyNumbers as $HandyNumber) {
-            $Url = "https://www.smsflatrate.net/schnittstelle.php?key=".$ApiKey."&from=smsflatrate&to=".$HandyNumber."&text=".urlencode($Message)."&type=1&cost=1&status=1";
+            $Url = "https://www.smsflatrate.net/schnittstelle.php?key=".$ApiKey."&from=IP-Symcon&to=".$HandyNumber."&text=".urlencode($Message)."&type=1&cost=1&status=1";
 
             $OutputSendSMS = $this->SendCurl($Url);
             array_unshift($OutputSendSMS,$HandyNumber);
