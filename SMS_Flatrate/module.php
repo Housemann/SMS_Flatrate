@@ -177,9 +177,11 @@
                   break;
               }
             }
+            // wenn 109 dann Datum auf leer ansonsten Datum
+            $date = $Values['StatusCode']==109 ? "" : date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
             // ergebnis
             $Message = $Message. $this->translate("HandyNumber:")." ".$Values['HandyNumber']."\n";
-            $Message = $Message. $this->translate("Date:")." ".date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock")."\n";
+            $Message = $Message. $this->translate("Date:")." ".$date."\n";
             $Message = $Message. $this->translate("Status:")." ".$Values['StatusCode']."\n";
             $Message = $Message. $this->translate("Status Message:")." ".$this->translate($this->ErrorCodes($Values['StatusCode']))."\n";
             $Message = $Message. $this->translate("Price:")." ".round($Values['Price'],2)." €"."\n";
