@@ -183,7 +183,7 @@
             $Message = $Message. $this->translate("HandyNumber:")." ".$Values['HandyNumber']."\n";
             $Message = $Message. $this->translate("Date:")." ".$date."\n";
             $Message = $Message. $this->translate("Status:")." ".$Values['StatusCode']."\n";
-            $Message = $Message. $this->translate("Status Message:")." ".$this->translate($this->ErrorCodes($Values['StatusCode']))."\n";
+            $Message = $Message. $this->translate("Status Message:")." ".$this->translate(@$this->ErrorCodes($Values['StatusCode']))."\n";
             $Message = $Message. $this->translate("Price:")." ".round($Values['Price'],2)." €"."\n";
             
             $Cnt++;
