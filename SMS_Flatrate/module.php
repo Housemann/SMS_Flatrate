@@ -213,30 +213,31 @@
         }
 
         // StatusCodes
-        private function ErrorCodes(int $Code) 
+        private function ErrorCodes(string $Code) 
         {
           // Error codes
           $ErrorCodes = array 
           (
-            100 => "SMS successfully transmitted to the gateway",
-            101 => "SMS was delivered",
-            102 => "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable)",
-            103 => "SMS probably could not be delivered (wrong phone number, SIM not active)",
-            104 => "SMS still could not be delivered after 48 hours.The return value 102 becomes status 104 after 2 days.",
-            109 => "SMS ID expired or invalid (manual status query)",
-            110 => "Wrong interface key or your account is locked",
-            120 => "Credit is not enough",
-            130 => "Incorrect data transfer (e.g. sender is missing)",
-            131 => "Receiver not correct",
-            132 => "Sender not correct",
-            133 => "Message text not correct",
-            140 => "Wrong AppKey or your account is locked",
-            150 => "You have tried to send to an international cell phone number of a gateway that is exclusively for sending to Germany. Please use international gateway or auto type function.",
-            170 => "Parameter time= is not correct. Please in format: DD.MM.YYY-SS:MM or remove parameter for immediate shipping.",
-            171 => "Parameter time= is scheduled too far in the future (max. 360 days)",
-            180 => "Account not yet completely activated Volume restriction still active Please request activation in the Customer Center so that unlimited messaging is possible.",
-            231 => "No smsflatrate.net group available or not correct",
-            404 => "Unknown error. Please contact support (ticket@smsflatrate.net) urgently."
+            ""    => "No StatusCode"
+            "100" => "SMS successfully transmitted to the gateway",
+            "101" => "SMS was delivered",
+            "102" => "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable)",
+            "103" => "SMS probably could not be delivered (wrong phone number, SIM not active)",
+            "104" => "SMS still could not be delivered after 48 hours.The return value 102 becomes status 104 after 2 days.",
+            "109" => "SMS ID expired or invalid (manual status query)",
+            "110" => "Wrong interface key or your account is locked",
+            "120" => "Credit is not enough",
+            "130" => "Incorrect data transfer (e.g. sender is missing)",
+            "131" => "Receiver not correct",
+            "132" => "Sender not correct",
+            "133" => "Message text not correct",
+            "140" => "Wrong AppKey or your account is locked",
+            "150" => "You have tried to send to an international cell phone number of a gateway that is exclusively for sending to Germany. Please use international gateway or auto type function.",
+            "170" => "Parameter time= is not correct. Please in format: DD.MM.YYY-SS:MM or remove parameter for immediate shipping.",
+            "171" => "Parameter time= is scheduled too far in the future (max. 360 days)",
+            "180" => "Account not yet completely activated Volume restriction still active Please request activation in the Customer Center so that unlimited messaging is possible.",
+            "231" => "No smsflatrate.net group available or not correct",
+            "404" => "Unknown error. Please contact support (ticket@smsflatrate.net) urgently."
           );
 
           return $ErrorCodes[$Code];
