@@ -177,13 +177,19 @@
                   break;
               }
             }
+            // prüfen ob int
+            $StatusCode = $Values['StatusCode'];
+            if(!is_int($StatusCode))
+              $StatusCode = 0;
+
+
             // wenn 109 dann Datum auf leer ansonsten Datum
-            $date = $Values['StatusCode']==109 ? "" : date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
+            $date = $StatusCode==109 ? "" : date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
             // ergebnis
             $Message = $Message. $this->translate("HandyNumber:")." ".$Values['HandyNumber']."\n";
             $Message = $Message. $this->translate("Date:")." ".$date."\n";
-            $Message = $Message. $this->translate("Status:")." ".$Values['StatusCode']."\n";
-            $Message = $Message. $this->translate("Status Message:")." ".$this->translate(@$this->ErrorCodes($Values['StatusCode']))."\n";
+            $Message = $Message. $this->translate("Status:")." ".$StatusCode."\n";
+            $Message = $Message. $this->translate("Status Message:")." ".$this->translate(@$this->ErrorCodes($StatusCode))."\n";
             $Message = $Message. $this->translate("Price:")." ".round($Values['Price'],2)." €"."\n";
             
             $Cnt++;
@@ -218,6 +224,7 @@
           // Error codes
           $ErrorCodes = array 
           (
+            0   => "No Values given",
             100 => "SMS successfully transmitted to the gateway",
             101 => "SMS was delivered",
             102 => "SMS has not been delivered yet (e.g. cell phone off or temporarily unavailable)",

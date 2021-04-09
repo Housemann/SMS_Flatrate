@@ -21,6 +21,7 @@
         "No smsflatrate.net group available or not correct": "Keine smsflatrate.net Gruppe vorhanden oder nicht korrekt",
         "Unknown error. Please contact support (ticket@smsflatrate.net) urgently.": "Unbekannter Fehler. Bitte dringend Support (ticket@smsflatrate.net) kontaktieren.",
         "No StatusCode": "Kein StatusCode",
+        "No Values given": "Kein Wert übergeben",
 
         "HandyNumber is wrong!": "Handynummer ist falsch!",
         "Status:": "Status:",
@@ -67,6 +68,7 @@
         "No smsflatrate.net group available or not correct": "Keine smsflatrate.net Gruppe vorhanden oder nicht korrekt",
         "Unknown error. Please contact support (ticket@smsflatrate.net) urgently.": "Unbekannter Fehler. Bitte dringend Support (ticket@smsflatrate.net) kontaktieren.",
         "No StatusCode": "Kein StatusCode",
+        "No Values given": "Kein Wert übergeben",
 
         "HandyNumber is wrong!": "Handynummer ist falsch!",
         "Status:": "Status:",
