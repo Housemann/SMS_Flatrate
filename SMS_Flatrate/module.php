@@ -150,54 +150,70 @@
           $ReturnValues = $this->ReadAttributeString("ReturnArray");
           $ReturnValues = json_decode($ReturnValues,true);
 
-          $MaxCount = count($ReturnValues);
+          if(is_countable($ReturnValues)) {
+            $MaxCount = count($ReturnValues);  
+          } else {
+            $MaxCount = 0;
+          }
+          #$MaxCount = count($ReturnValues);
           $Message = "";
           
           $Cnt = 0;
-          foreach($ReturnValues as $Values) {
+          if(is_countable($ReturnValues)) {
+            foreach($ReturnValues as $Values) {
+              
+              // curl aufrum um request abzufragen
+              $Url = "https://www.smsflatrate.net/status.php?id=".$Values['RequestSmsId'];
+              $OutputStatus = $this->SendCurl ($Url);
+              
+              // Output in array schrieben
+              $OutputStatus = array(
+                "StatusCode"  => @$OutputStatus[0],
+                "Date"        => @$OutputStatus[1]
+              );
             
-            // curl aufrum um request abzufragen
-            $Url = "https://www.smsflatrate.net/status.php?id=".$Values['RequestSmsId'];
-            $OutputStatus = $this->SendCurl ($Url);
-            
-            // Output in array schrieben
-            $OutputStatus = array(
-              "StatusCode"  => @$OutputStatus[0],
-              "Date"        => @$OutputStatus[1]
-            );
-          
-            // request daten DATE und STATUSCODE im Array ändern mit neuen werten
-            foreach($Values as $key => $value) {
-              switch ($key) {
-                case 'Date':
-                  $Values['Date'] = $OutputStatus['Date'];
-                  break;
-                case 'StatusCode':
-                  $Values['StatusCode'] = $OutputStatus['StatusCode'];
-                  break;
+              // request daten DATE und STATUSCODE im Array ändern mit neuen werten
+              foreach($Values as $key => $value) {
+                switch ($key) {
+                  case 'Date':
+                    $Values['Date'] = $OutputStatus['Date'];
+                    break;
+                  case 'StatusCode':
+                    $Values['StatusCode'] = $OutputStatus['StatusCode'];
+                    break;
+                }
               }
-            }
-            // prüfen ob int
-            $StatusCode = $Values['StatusCode'];
-            if(!is_int($StatusCode))
-              $StatusCode = 0;
+              // prüfen ob int
+              $StatusCode = $Values['StatusCode'];
+              if(!is_int($StatusCode))
+                $StatusCode = 0;
 
 
-            // wenn 109 dann Datum auf leer ansonsten Datum
-            $date = $StatusCode==109 ? "" : date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
-            // ergebnis
-            $Message = $Message. $this->translate("HandyNumber:")." ".$Values['HandyNumber']."\n";
-            $Message = $Message. $this->translate("Date:")." ".$date."\n";
-            $Message = $Message. $this->translate("Status:")." ".$StatusCode."\n";
-            $Message = $Message. $this->translate("Status Message:")." ".$this->translate(@$this->ErrorCodes($StatusCode))."\n";
-            $Message = $Message. $this->translate("Price:")." ".round($Values['Price'],2)." €"."\n";
-            
-            $Cnt++;
+              // wenn 109 oder 0 dann Datum auf leer ansonsten Datum
+              #$date = $StatusCode==109 ? "" : date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
+              if($StatusCode==109) {
+                $date = "";
+              } elseif($StatusCode==0 || $StatusCode==null) {
+                $date = "";
+              } else {
+                $date = date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
+              }
 
-            if($Cnt < $MaxCount) {
-              $Message = $Message. "\n";
-            } elseif($Cnt == $MaxCount) {
-              $Message = $Message. "";
+
+              // ergebnis
+              $Message = $Message. $this->translate("HandyNumber:")." ".$Values['HandyNumber']."\n";
+              $Message = $Message. $this->translate("Date:")." ".$date."\n";
+              $Message = $Message. $this->translate("Status:")." ".$StatusCode."\n";
+              $Message = $Message. $this->translate("Status Message:")." ".$this->translate(@$this->ErrorCodes($StatusCode))."\n";
+              $Message = $Message. $this->translate("Price:")." ".round($Values['Price'],2)." €"."\n";
+              
+              $Cnt++;
+
+              if($Cnt < $MaxCount) {
+                $Message = $Message. "\n";
+              } elseif($Cnt == $MaxCount) {
+                $Message = $Message. "";
+              }
             }
           }
           // Message in TextBox schreiben
@@ -205,6 +221,8 @@
 
           // aktuelles guthaben abfragen
           $this->GetCredits();
+
+          return $Message;
         }
 
         // Curl Aufruf
