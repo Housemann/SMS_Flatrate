@@ -155,6 +155,7 @@
           if(is_countable($ReturnValues)) {
             $MaxCount = count($ReturnValues);  
           }
+          $this->SendDebug(__FUNCTION__ . ' MaxCount: ', $MaxCount, 0);
           #$MaxCount = count($ReturnValues);
           $Message = "";
           
@@ -188,6 +189,7 @@
               if(!is_int($StatusCode))
                 $StatusCode = 0;
 
+              $this->SendDebug(__FUNCTION__ . ' StatusCode: ', $StatusCode, 0);
 
               // wenn 109 oder 0 dann Datum auf leer ansonsten Datum
               #$date = $StatusCode==109 ? "" : date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
