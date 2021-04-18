@@ -149,6 +149,7 @@
           // Regest SMS ids auslesen und prüfen ob angekommen
           $ReturnValues = $this->ReadAttributeString("ReturnArray");
           $ReturnValues = json_decode($ReturnValues,true);
+          $this->SendDebug(__FUNCTION__ . ' ReturnValues: ', $ReturnValues, 0);
 
           $MaxCount = 0;
           if(is_countable($ReturnValues)) {
@@ -200,13 +201,13 @@
 
 
               // ergebnis
-              if($StatusCode<>0) {
+              #if($StatusCode<>0) {
                 $Message = $Message. $this->translate("HandyNumber:")." ".$Values['HandyNumber']."\n";
                 $Message = $Message. $this->translate("Date:")." ".$date."\n";
                 $Message = $Message. $this->translate("Status:")." ".$StatusCode."\n";
                 $Message = $Message. $this->translate("Status Message:")." ".$this->translate(@$this->ErrorCodes($StatusCode))."\n";
                 $Message = $Message. $this->translate("Price:")." ".round($Values['Price'],2)." €"."\n";
-              }
+              #}
               
               $Cnt++;
 
@@ -223,7 +224,7 @@
           // aktuelles guthaben abfragen
           $this->GetCredits();
 
-          return $Message;
+          return $ReturnValues;
         }
 
         // Curl Aufruf
