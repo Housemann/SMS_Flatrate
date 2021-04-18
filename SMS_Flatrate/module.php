@@ -204,12 +204,6 @@
                 $StatusCode = 0;
                 $this->SendDebug(__FUNCTION__ . ' StatusCode5: ', $StatusCode, 0);
               }
-              
-              
-              if(!is_int($StatusCode))
-                $StatusCode = 0;
-
-              $this->SendDebug(__FUNCTION__ . ' StatusCode6: ', $StatusCode, 0);
 
               // wenn 109 oder 0 dann Datum auf leer ansonsten Datum
               #$date = $StatusCode==109 ? "" : date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
