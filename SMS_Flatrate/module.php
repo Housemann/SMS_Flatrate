@@ -166,6 +166,7 @@
               // curl aufrum um request abzufragen
               $Url = "https://www.smsflatrate.net/status.php?id=".$Values['RequestSmsId'];
               $OutputStatus = $this->SendCurl ($Url);
+              $this->SendDebug(__FUNCTION__ . ' OutputStatus: ', $OutputStatus, 0);
               
               // Output in array schrieben
               $OutputStatus = array(
