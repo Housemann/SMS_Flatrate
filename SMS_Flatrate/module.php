@@ -149,7 +149,7 @@
           // Regest SMS ids auslesen und prüfen ob angekommen
           $ReturnValues = $this->ReadAttributeString("ReturnArray");
           $ReturnValues = json_decode($ReturnValues,true);
-          $this->SendDebug(__FUNCTION__ . ' ReturnValues: ', $ReturnValues, 0);
+          $this->SendDebug(__FUNCTION__ . ' ReturnValues: ', json_encode($ReturnValues), 0);
 
           $MaxCount = 0;
           if(is_countable($ReturnValues)) {
@@ -166,7 +166,7 @@
               // curl aufrum um request abzufragen
               $Url = "https://www.smsflatrate.net/status.php?id=".$Values['RequestSmsId'];
               $OutputStatus = $this->SendCurl ($Url);
-              $this->SendDebug(__FUNCTION__ . ' OutputStatus: ', $OutputStatus, 0);
+              $this->SendDebug(__FUNCTION__ . ' OutputStatus: ', json_encode($OutputStatus), 0);
               
               // Output in array schrieben
               $OutputStatus = array(
