@@ -173,6 +173,7 @@
                 "StatusCode"  => @$OutputStatus[0],
                 "Date"        => @$OutputStatus[1]
               );
+              $this->SendDebug(__FUNCTION__ . ' OutputStatus2: ', json_encode($OutputStatus), 0);
             
               // request daten DATE und STATUSCODE im Array ändern mit neuen werten
               foreach($Values as $key => $value) {
@@ -185,12 +186,16 @@
                     break;
                 }
               }
+              $this->SendDebug(__FUNCTION__ . ' OutputStatus2: ', $Values['Date']." | ".$Values['StatusCode'], 0);
+
               // prüfen ob int
               $StatusCode = $Values['StatusCode'];
+              $this->SendDebug(__FUNCTION__ . ' StatusCode1: ', $StatusCode, 0);
+
               if(!is_int($StatusCode))
                 $StatusCode = 0;
 
-              $this->SendDebug(__FUNCTION__ . ' StatusCode: ', $StatusCode, 0);
+              $this->SendDebug(__FUNCTION__ . ' StatusCode2: ', $StatusCode, 0);
 
               // wenn 109 oder 0 dann Datum auf leer ansonsten Datum
               #$date = $StatusCode==109 ? "" : date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
