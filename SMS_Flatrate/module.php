@@ -150,10 +150,9 @@
           $ReturnValues = $this->ReadAttributeString("ReturnArray");
           $ReturnValues = json_decode($ReturnValues,true);
 
+          $MaxCount = 0;
           if(is_countable($ReturnValues)) {
             $MaxCount = count($ReturnValues);  
-          } else {
-            $MaxCount = 0;
           }
           #$MaxCount = count($ReturnValues);
           $Message = "";
