@@ -214,16 +214,17 @@
               } else {
                 $date = date("d.m.Y - H:i:s",$Values['Date'])." ".$this->translate("Clock");
               }
-
+              $this->SendDebug(__FUNCTION__ . ' date: ', $date, 0);
 
               // ergebnis
-              #if($StatusCode<>0) {
+              if($StatusCode<>0) {
                 $Message = $Message. $this->translate("HandyNumber:")." ".$Values['HandyNumber']."\n";
                 $Message = $Message. $this->translate("Date:")." ".$date."\n";
                 $Message = $Message. $this->translate("Status:")." ".$StatusCode."\n";
                 $Message = $Message. $this->translate("Status Message:")." ".$this->translate(@$this->ErrorCodes($StatusCode))."\n";
                 $Message = $Message. $this->translate("Price:")." ".round($Values['Price'],2)." €"."\n";
-              #}
+              }
+              $this->SendDebug(__FUNCTION__ . ' Message1: ', $Message, 0);
               
               $Cnt++;
 
@@ -232,6 +233,7 @@
               } elseif($Cnt == $MaxCount) {
                 $Message = $Message. "";
               }
+              $this->SendDebug(__FUNCTION__ . ' Message2: ', $Message, 0);
             }
           }
           // Message in TextBox schreiben
