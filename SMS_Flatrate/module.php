@@ -201,7 +201,6 @@
 
 
               // ergebnis
-              $Message = "";
               if($StatusCode<>0) {
                 $Message = $Message. $this->translate("HandyNumber:")." ".$Values['HandyNumber']."\n";
                 $Message = $Message. $this->translate("Date:")." ".$date."\n";
