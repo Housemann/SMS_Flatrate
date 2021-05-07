@@ -73,6 +73,7 @@
           $ApiKey = $this->ReadPropertyString("APIKey");
           $ArrayHandyNumbers = explode(";",$HandyNumbers);
           $CountArrayHandyNumbers = count($ArrayHandyNumbers);
+          $Message = $this->ConvertMessage($Message);
 
           $ArrayAllNumbers = array();
           foreach($ArrayHandyNumbers as $HandyNumber) {
@@ -245,6 +246,12 @@
           return $ReturnValues;
         }
 
+        private function ConvertMessage($Message)
+        {
+          $ConvertedMessage = strip_tags(str_replace(array("<br>"),"\n",$Message));
+          return $ConvertedMessage;
+        }
+
         // Curl Aufruf
         private function SendCurl (string $Url) {
           $ch = curl_init();
@@ -292,6 +299,7 @@
           $HandyNumber  = $this->ReadPropertyString("HandyNumber");
           $ApiKey       = $this->ReadPropertyString("APIKey");
           $Message      = $this->ReadPropertyString("TestMessage");
+          $Message      = $this->ConvertMessage($Message);
 
           if(!empty($HandyNumber) && !preg_match('/^[0-9]+$/', $HandyNumber)) {
               echo $this->translate("HandyNumber is wrong!");
