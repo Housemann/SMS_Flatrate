@@ -73,11 +73,11 @@
           $ApiKey = $this->ReadPropertyString("APIKey");
           $ArrayHandyNumbers = explode(";",$HandyNumbers);
           $CountArrayHandyNumbers = count($ArrayHandyNumbers);
-          $Message = $this->ConvertMessage($Message);
+          $Message2 = $this->ConvertMessage($Message);
 
           $ArrayAllNumbers = array();
           foreach($ArrayHandyNumbers as $HandyNumber) {
-            $Url = "https://www.smsflatrate.net/schnittstelle.php?key=".$ApiKey."&from=IP-Symcon&to=".$HandyNumber."&text=".urlencode($Message)."&type=1&cost=1&status=1";
+            $Url = "https://www.smsflatrate.net/schnittstelle.php?key=".$ApiKey."&from=IP-Symcon&to=".$HandyNumber."&text=".urlencode($Message2)."&type=1&cost=1&status=1";
 
             $OutputSendSMS = $this->SendCurl($Url);
             array_unshift($OutputSendSMS,$HandyNumber);
@@ -248,7 +248,7 @@
 
         private function ConvertMessage($Message)
         {
-          $ConvertedMessage = strip_tags(str_replace(array('<br>'),'\n',$Message));
+          $ConvertedMessage = strip_tags(str_replace(array("<br>"),"\n",$Message));
           return $ConvertedMessage;
         }
 
@@ -299,12 +299,12 @@
           $HandyNumber  = $this->ReadPropertyString("HandyNumber");
           $ApiKey       = $this->ReadPropertyString("APIKey");
           $Message      = $this->ReadPropertyString("TestMessage");
-          $Message      = $this->ConvertMessage($Message);
+          $Message2      = $this->ConvertMessage($Message);
 
           if(!empty($HandyNumber) && !preg_match('/^[0-9]+$/', $HandyNumber)) {
               echo $this->translate("HandyNumber is wrong!");
           } elseif(!empty($HandyNumber) && preg_match('/^[0-9]+$/', $HandyNumber)) {
-              $Output = $this->SendSMS($HandyNumber, $Message);
+              $Output = $this->SendSMS($HandyNumber, $Message2);
               echo $this->translate("Status:")." ".$Output[0]['StatusCode']."\n".$this->translate("Status Message:")." ".$this->translate($this->ErrorCodes($Output[0]['StatusCode']))."\n".$this->translate("Price:")." ".str_replace(".",",",round($Output[0]['Price'],2));
           } elseif(empty($HandyNumber)) {
               echo $this->translate("Handynumber is empty!");
