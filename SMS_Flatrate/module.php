@@ -248,7 +248,7 @@
 
         private function ConvertMessage($Message)
         {
-          $ConvertedMessage = strip_tags(str_replace(array("<br>"),"\n",$Message));
+          $ConvertedMessage = strip_tags(str_replace(array('<br>'),'\n',$Message));
           return $ConvertedMessage;
         }
 
